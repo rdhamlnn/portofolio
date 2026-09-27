@@ -1,0 +1,40 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_ai03bOXGWSbk3D6y2kcLlm4I
+      VERCEL_PROJECT_ID: prj_vTud18r7k9Vdf4F4h6Icm2zhDaXx
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      # The CLI uploads the source and lets Vercel build it (see vercel.json:
+      # framework null + outputDirectory out). A failed build exits non-zero,
+      # so a broken change shows up as a failed workflow.
+      - name: Deploy
+        run: npx --yes vercel@latest deploy --prod --yes --token="${{ secrets.VERCEL_TOKEN }}"
+
+      - name: Verify
+        run: |
+          for i in 1 2 3 4 5; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -L https://rdhamlnn.vercel.app/)
+            echo "attempt $i: $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 10
+          done
+          echo "production alias did not return 200" >&2
+          exit 1
