@@ -10,8 +10,9 @@ deployed on Vercel.
 - **Package manager:** npm
 - **Deploy target:** Vercel — https://rdhamlnn.vercel.app (static export from `out/`)
 - **Repository:** https://github.com/rdhamlnn/portofolio (branch `main`)
-- **Auto-deploy:** not wired. Vercel has no GitHub login connection for this account, so
-  `vercel git connect` and deploy hooks are both unavailable — deploy manually (see Commands).
+- **Auto-deploy:** yes — `.github/workflows/deploy.yml` runs on every push to `main`. It
+  needs the `VERCEL_TOKEN` repo secret (GitHub → Settings → Secrets → Actions). Vercel's own
+  git integration is unavailable for this account (see Troubleshooting), so this replaces it.
 - **Data:** all content lives in `src/data/site.ts` — edit that file, not the components
 
 ## Commands
@@ -32,6 +33,8 @@ npm run build                    # static export -> out/
 npx vercel deploy --prod --yes   # https://rdhamlnn.vercel.app
 ```
 
+Or just `git push` — GitHub Actions deploys automatically (see `.github/workflows/deploy.yml`).
+
 Anonymous throwaway preview, if you ever need one:
 
 ```bash
@@ -46,6 +49,8 @@ Vercel Next.js builder own the routing: the root route then resolves to 404 whil
 ## Project Structure
 
 ```
+.github/
+  workflows/deploy.yml    # push to main -> vercel deploy --prod -> verify alias 200
 src/
   app/
     layout.tsx        # metadata, fonts, root shell
@@ -148,9 +153,13 @@ permission) instead of throwing.
   leave it enabled and do not override it per-command.
 - **`vercel git connect` fails with `You need to add a Login Connection to your GitHub
   account first. (400)`.** The Vercel account was created with an email/SMS login, not via
-  GitHub, so it has no Git integration. Deploy hooks are unavailable for the same reason
-  (`The project is not connected to any repository so it cannot have deploy hooks`).
-  Options: add the login connection from the Vercel dashboard, or keep deploying manually.
+  GitHub, so it has no Git integration. Deploy hooks fail the same way (`The project is not
+  connected to any repository so it cannot have deploy hooks`). Fix: deploy from GitHub
+  Actions with an account token instead — see `.github/workflows/deploy.yml`. Adding the
+  login connection in the Vercel dashboard is the alternative.
+- **Vercel API returns `User not found.` for `GET /v2/user` on a valid token.** Expected for
+  an account-level access token: it can drive deploys, but the user endpoint is not readable.
+  Verify a token with `vercel project ls --token <t>` instead — a good token lists projects.
 
 ## Review Triggers
 
