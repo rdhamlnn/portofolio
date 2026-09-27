@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(profile.url),
   title: `${profile.name} — ${profile.role}`,
   description: profile.intro,
   keywords: [
@@ -26,17 +27,28 @@ export const metadata: Metadata = {
     "Banjarmasin",
   ],
   authors: [{ name: profile.name, url: profile.github }],
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
+    url: "/",
     title: `${profile.name} — ${profile.role}`,
     description: profile.headline,
     locale: "id_ID",
     siteName: profile.name,
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: `${profile.name} — ${profile.headline}`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${profile.name} — ${profile.role}`,
     description: profile.headline,
+    images: ["/og.png"],
   },
 };
 

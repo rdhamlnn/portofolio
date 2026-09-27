@@ -93,4 +93,81 @@ for (const vp of [
   await page.close();
 }
 
+// Link preview + favicon: both are invisible in the page body, so a broken one
+// ships silently. Check them explicitly.
+const problems = [];
+{
+  const page = await browser.newPage({ viewport: { width: 900, height: 700 } });
+  await page.goto(URL, { waitUntil: "domcontentloaded" });
+
+  const meta = await page.evaluate(() => {
+    const content = (sel) => document.querySelector(sel)?.content ?? null;
+    return {
+      ogImage: content('meta[property="og:image"]'),
+      ogImageW: content('meta[property="og:image:width"]'),
+      ogImageH: content('meta[property="og:image:height"]'),
+      card: content('meta[name="twitter:card"]'),
+      canonical: document.querySelector('link[rel="canonical"]')?.href ?? null,
+      icon: document.querySelector('link[rel*="icon"]')?.href ?? null,
+    };
+  });
+
+  // Crawlers reject a relative og:image, so it must be absolute.
+  if (!meta.ogImage || !/^https?:\/\//.test(meta.ogImage)) {
+    problems.push(`og:image is missing or not absolute: ${meta.ogImage}`);
+  }
+  if (`${meta.ogImageW}x${meta.ogImageH}` !== "1200x630") {
+    problems.push(`og:image declared ${meta.ogImageW}x${meta.ogImageH}, expected 1200x630`);
+  }
+  if (meta.card !== "summary_large_image") problems.push(`twitter:card is "${meta.card}"`);
+
+  const og = meta.ogImage
+    ? await page.evaluate(async (u) => {
+        try {
+          const r = await fetch(u);
+          const b = await r.blob();
+          const dims = await new Promise((res) => {
+            const im = new Image();
+            im.onload = () => res({ w: im.naturalWidth, h: im.naturalHeight });
+            im.onerror = () => res(null);
+            im.src = u;
+          });
+          return { status: r.status, type: r.headers.get("content-type"), bytes: b.size, dims };
+        } catch (e) {
+          return { error: String(e) };
+        }
+      }, meta.ogImage)
+    : null;
+  if (og?.status !== 200) problems.push(`og image fetch failed: ${JSON.stringify(og)}`);
+  if (og?.dims && (og.dims.w !== 1200 || og.dims.h !== 630)) {
+    problems.push(`og image is ${og.dims.w}x${og.dims.h} on the wire, expected 1200x630`);
+  }
+
+  // A path truncated during generation still parses as SVG but draws nothing.
+  const icon = meta.icon
+    ? await page.evaluate(async (u) => {
+        const txt = await (await fetch(u)).text();
+        const host = document.createElement("div");
+        host.style.cssText = "position:fixed;width:128px;height:128px;opacity:0";
+        host.innerHTML = txt;
+        document.body.append(host);
+        const b = host.querySelector("path")?.getBBox();
+        return { bytes: txt.length, usesTextEl: txt.includes("<text"), w: b?.width ?? 0, h: b?.height ?? 0 };
+      }, meta.icon)
+    : null;
+  if (!icon || icon.w === 0 || icon.h === 0) problems.push(`favicon draws nothing: ${JSON.stringify(icon)}`);
+  if (icon?.usesTextEl) problems.push("favicon uses <text>, which renders per-platform");
+
+  log("[preview]", JSON.stringify({ meta, og, icon }));
+  await page.close();
+}
+
 await browser.close();
+
+if (problems.length) {
+  console.log("\nFAILED:");
+  for (const p of problems) console.log("  -", p);
+  process.exitCode = 1;
+} else {
+  console.log("\nAll preview checks passed.");
+}

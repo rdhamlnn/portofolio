@@ -30,6 +30,7 @@ export const profile = {
   status: "Terbuka untuk proyek freelance & kolaborasi",
   email: "fzridhaa@gmail.com",
   github: "https://github.com/rdhamlnn",
+  url: "https://rdhamlnn.vercel.app",
   avatar: "/avatar.jpg",
   education: {
     school: "Politeknik Negeri Banjarmasin",
