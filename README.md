@@ -155,6 +155,14 @@ permission) instead of throwing.
   children (drifting glow divs, the marquee track) legitimately sit outside the viewport —
   verify with `document.documentElement.scrollWidth - clientWidth === 0`, not by scanning
   every element's bounding box.
+- **`scrollWidth` is a few px wider than `clientWidth` on mobile, but nothing looks
+  broken.** Cause: `.reveal[data-axis="left"|"right"]` offsets by `translateX`, and an
+  element that has not been revealed yet sits at that offset. If the offset exceeds the
+  section padding (`px-5` = 20px), it widens the document. `body { overflow-x: hidden }`
+  hides it visually, so the page does not actually scroll sideways — which is why the
+  measurement and the screenshot disagree. Fix: keep the horizontal reveal offset under
+  20px (currently 18px). Note an element starts at `opacity: 0` but **still contributes
+  to scrollWidth**, so measure right after load, before any scrolling.
 - **A `<Reveal>` wrapper never becomes visible.** Cause: `IntersectionObserver` never
   fires for an element inside a `display: none` subtree, so `data-shown` stays `false`
   and `.reveal` keeps `opacity: 0` forever. This bit the hero scroll cue, which is

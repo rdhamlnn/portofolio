@@ -219,11 +219,13 @@ body {
 .reveal[data-axis="up"] {
   transform: translateY(28px);
 }
+/* Horizontal distance stays inside the section padding (px-5 = 20px), otherwise a
+   not-yet-revealed element widens document.scrollWidth past the viewport. */
 .reveal[data-axis="left"] {
-  transform: translateX(-34px);
+  transform: translateX(-18px);
 }
 .reveal[data-axis="right"] {
-  transform: translateX(34px);
+  transform: translateX(18px);
 }
 .reveal[data-axis="scale"] {
   transform: scale(0.955) translateY(14px);
