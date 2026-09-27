@@ -9,6 +9,9 @@ deployed on Vercel.
 - **Runtime:** Node.js 24
 - **Package manager:** npm
 - **Deploy target:** Vercel — https://rdhamlnn.vercel.app (static export from `out/`)
+- **Repository:** https://github.com/rdhamlnn/portofolio (branch `main`)
+- **Auto-deploy:** not wired. Vercel has no GitHub login connection for this account, so
+  `vercel git connect` and deploy hooks are both unavailable — deploy manually (see Commands).
 - **Data:** all content lives in `src/data/site.ts` — edit that file, not the components
 
 ## Commands
@@ -104,7 +107,8 @@ Dev: `typescript`, `tailwindcss` (+ `@tailwindcss/postcss`), `eslint` + `eslint-
 
 ## Configuration
 
-- `next.config.ts` — only `reactStrictMode`; defaults otherwise.
+- `next.config.ts` — `output: "export"` + `images.unoptimized` (required by static export)
+  and `reactStrictMode`. `vercel.json` — `framework: null`, `outputDirectory: "out"`.
 - Tailwind v4 is configured entirely in `globals.css` via `@import "tailwindcss"` —
   there is no `tailwind.config.js`.
 - Fonts: `Geist` and `Geist_Mono` through `next/font/google`, exposed as
@@ -133,6 +137,20 @@ permission) instead of throwing.
 - **Avatar looks blurry.** `next/image` only requests the widths configured via `sizes` /
   `width`. Raise the requested width rather than scaling the source. `images.unoptimized`
   is required for static export, so `sizes` is what controls the delivered file.
+- **`git push` fails with `403 ... denied to <user>` on a repo the token can read.**
+  Cause: a fine-grained PAT (prefix `github_pat_`) only reaches repositories explicitly
+  selected when the token was created, so anything created afterwards — including your own
+  new repo — stays out of scope. Fix: `gh auth login --web --scopes repo,workflow,read:org`
+  and complete the device flow; that issues a `gho_` token with full scope.
+- **`git push` fails with `could not read Username for 'https://github.com'`.** Cause: the
+  credential helper was neutralised, or a stale separate helper is configured. `gh auth
+  setup-git` installs `!gh auth git-credential`, which is the helper that actually works —
+  leave it enabled and do not override it per-command.
+- **`vercel git connect` fails with `You need to add a Login Connection to your GitHub
+  account first. (400)`.** The Vercel account was created with an email/SMS login, not via
+  GitHub, so it has no Git integration. Deploy hooks are unavailable for the same reason
+  (`The project is not connected to any repository so it cannot have deploy hooks`).
+  Options: add the login connection from the Vercel dashboard, or keep deploying manually.
 
 ## Review Triggers
 
