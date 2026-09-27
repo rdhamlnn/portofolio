@@ -8,7 +8,7 @@ deployed on Vercel.
 - **Stack:** Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS v4
 - **Runtime:** Node.js 24
 - **Package manager:** npm
-- **Deploy target:** Vercel (static export from `out/`, anonymous temporary deployment)
+- **Deploy target:** Vercel — https://rdhamlnn.vercel.app (static export from `out/`)
 - **Data:** all content lives in `src/data/site.ts` — edit that file, not the components
 
 ## Commands
@@ -22,17 +22,23 @@ npm run lint         # eslint
 npm run check <url>  # live smoke test against a deployed URL (needs playwright-core + Chrome)
 ```
 
-Deploy:
+Deploy (production, to the permanent alias):
 
 ```bash
-npm run build                       # static export -> out/
-npx vercel deploy out --temporary --yes   # anonymous deploy; claim URL printed at the end
+npm run build                    # static export -> out/
+npx vercel deploy --prod --yes   # https://rdhamlnn.vercel.app
 ```
 
-The site is fully prerendered, so `next.config.ts` sets `output: "export"` and only the
-`out/` directory is uploaded. Do **not** deploy the source directory: with the default
-Vercel Next.js builder the root route resolves to 404 while `/_next/*` assets still return
-200 (see Troubleshooting).
+Anonymous throwaway preview, if you ever need one:
+
+```bash
+npx vercel deploy out --temporary --yes   # expires in 60 min; claim URL printed at the end
+```
+
+The site is fully prerendered, so `next.config.ts` sets `output: "export"` and
+`vercel.json` pins `outputDirectory: "out"` with `framework: null`. Do **not** let the
+Vercel Next.js builder own the routing: the root route then resolves to 404 while
+`/_next/*` assets still return 200 (see Troubleshooting).
 
 ## Project Structure
 
