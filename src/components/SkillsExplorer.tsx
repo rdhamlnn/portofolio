@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Reveal from "./Reveal";
 import { SectionHeading, SectionShell } from "./Section";
+import { CountUp } from "./fx";
 import { skillGroups } from "@/data/site";
 
 export default function SkillsExplorer() {
@@ -17,7 +18,7 @@ export default function SkillsExplorer() {
         lead="Pilih kategori untuk melihat detailnya. Angka menunjukkan seberapa sering aku memakainya dalam pekerjaan nyata, bukan sekadar pernah mencoba."
       />
 
-      <Reveal>
+      <Reveal axis="fade">
         <div
           role="tablist"
           aria-label="Kategori keahlian"
@@ -32,10 +33,10 @@ export default function SkillsExplorer() {
                 type="button"
                 aria-selected={isActive}
                 onClick={() => setActiveId(item.id)}
-                className={`shrink-0 rounded-full border px-4 py-2.5 text-sm transition-colors ${
+                className={`shine shrink-0 rounded-full border px-4 py-2.5 text-sm transition-all duration-300 hover:-translate-y-0.5 ${
                   isActive
                     ? "border-transparent bg-ink text-bg"
-                    : "border-line bg-surface text-muted hover:text-ink"
+                    : "border-line bg-surface text-muted hover:border-line-strong hover:text-ink"
                 }`}
               >
                 {item.label}
@@ -45,8 +46,8 @@ export default function SkillsExplorer() {
         </div>
       </Reveal>
 
-      <Reveal delay={80}>
-        <div className="glass mt-6 rounded-3xl p-7 sm:p-9">
+      <Reveal axis="scale" delay={80}>
+        <div key={group.id} className="animate-panel glass glow-border relative mt-6 rounded-3xl p-7 sm:p-9">
           <p className="text-sm text-muted">{group.blurb}</p>
 
           <ul className="mt-8 grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2">
@@ -54,7 +55,9 @@ export default function SkillsExplorer() {
               <li key={`${group.id}-${skill.name}`}>
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="text-sm font-medium">{skill.name}</span>
-                  <span className="font-mono text-xs text-muted">{skill.level}%</span>
+                  <span className="font-mono text-xs text-muted">
+                    <CountUp to={skill.level} />%
+                  </span>
                 </div>
 
                 <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-surface-strong">

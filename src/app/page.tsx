@@ -5,6 +5,7 @@ import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import Nav from "@/components/Nav";
 import Projects from "@/components/Projects";
+import ScrollFX from "@/components/ScrollFX";
 import SkillsExplorer from "@/components/SkillsExplorer";
 import Timeline from "@/components/Timeline";
 
@@ -22,6 +23,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <ScrollFX />
     </>
   );
 }

@@ -2,13 +2,16 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 
+type Axis = "up" | "left" | "right" | "scale" | "blur" | "fade";
+
 type RevealProps = {
   children: ReactNode;
   delay?: number;
+  axis?: Axis;
   className?: string;
 };
 
-export default function Reveal({ children, delay = 0, className }: RevealProps) {
+export default function Reveal({ children, delay = 0, axis = "up", className }: RevealProps) {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -35,6 +38,7 @@ export default function Reveal({ children, delay = 0, className }: RevealProps) 
     <div
       ref={ref}
       data-shown="false"
+      data-axis={axis}
       className={`reveal ${className ?? ""}`}
       style={{ ["--reveal-delay" as string]: `${delay}ms` }}
     >

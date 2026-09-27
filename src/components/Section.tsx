@@ -17,6 +17,19 @@ export function SectionShell({
   );
 }
 
+/** Words rise one by one; the CSS holds them until their Reveal parent shows. */
+function HeadingWords({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(" ").map((word, i) => (
+        <span key={`${word}-${i}`} className="word" style={{ ["--i" as string]: i }}>
+          {word}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export function SectionHeading({
   index,
   title,
@@ -27,12 +40,14 @@ export function SectionHeading({
   lead?: string;
 }) {
   return (
-    <Reveal className="mb-12 max-w-2xl">
+    <Reveal axis="fade" className="mb-12 max-w-2xl">
       <div className="mb-3 flex items-center gap-3 font-mono text-xs tracking-widest text-accent2 uppercase">
         <span>{index}</span>
-        <span className="h-px w-10 bg-line-strong" />
+        <span className="h-px w-10 origin-left bg-line-strong" />
       </div>
-      <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{title}</h2>
+      <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+        <HeadingWords text={title} />
+      </h2>
       {lead && <p className="mt-4 leading-relaxed text-muted">{lead}</p>}
     </Reveal>
   );

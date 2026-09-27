@@ -59,17 +59,19 @@ src/
     icon.svg          # favicon
   components/
     Nav.tsx           # sticky nav, scroll progress, active section, mobile menu
-    Hero.tsx          # hero, ambient canvas, typing role, stat strip
+    Hero.tsx          # hero, ambient canvas, typing role, stat strip, pointer parallax
     AmbientCanvas.tsx # cursor-reactive particle field (canvas 2D, no deps)
     TypingWords.tsx   # rotating role text
-    Marquee.tsx       # infinite tech marquee
-    About.tsx         # narrative + focus/principles cards
-    SkillsExplorer.tsx# tabbed skill groups with animated meters
-    Projects.tsx      # project list → detail explorer
-    Timeline.tsx      # education/experience timeline
-    Contact.tsx       # CTA + copy-email + channels
-    Footer.tsx        # footer + back-to-top
-    Reveal.tsx        # IntersectionObserver scroll reveal wrapper
+    Marquee.tsx       # double tech marquee (two opposed tracks, subtle parallax)
+    About.tsx         # narrative + focus/principles cards (tilt + spotlight)
+    SkillsExplorer.tsx# tabbed skill groups: count-up meters + shimmer
+    Projects.tsx      # project list → detail explorer (crossfade panel)
+    Timeline.tsx      # education/experience timeline (rail grows on scroll)
+    Contact.tsx       # CTA + copy-email + channels (cursor glow border)
+    Footer.tsx        # footer + magnetic back-to-top
+    Reveal.tsx        # IntersectionObserver scroll reveal wrapper (5 axes)
+    ScrollFX.tsx      # one rAF loop for parallax / rail-grow / dot-light
+    fx.tsx            # TiltCard, CursorGlow, CountUp primitives
     Section.tsx       # SectionShell / SectionHeading / Badge primitives
   data/
     site.ts           # ALL site content and copy
@@ -86,8 +88,22 @@ scripts/
 - Colors come from CSS custom properties in `globals.css` (`--accent`, `--accent-2`,
   `--line`, ...) exposed to Tailwind via `@theme inline`. Use the token names
   (`bg-accent`, `text-muted`, `border-line`) instead of raw hex.
-- Animation is CSS-only where possible: `.reveal` (scroll reveal), `.animate-rise`
-  (entry), `.animate-drift` (ambient), `.bar` (skill meter). No animation library.
+- Animation is CSS-first, with a single JS rAF loop for anything scroll-driven. No
+  animation library, and no new dependency for it.
+  - CSS classes: `.reveal` (+ `data-axis` up/left/right/scale/blur/fade), `.stagger`
+    (children rise in sequence), `.word` (word-by-word heading), `.animate-rise`,
+    `.animate-panel`, `.animate-drift`, `.bar` (meter + shimmer), `.shine`,
+    `.spotlight` / `.glow-border` / `.tilt` (pointer, driven by `--mx` / `--my` /
+    `--rx` / `--ry` set in JS), `.magnet`.
+  - `ScrollFX.tsx` is the only scroll listener on the page. It reads three data
+    attributes: `[data-parallax="<speed>"]` (translate3d), `[data-grow]` (sets `--g`
+    0..1 for the timeline rail) and `[data-dot]` (lights up past 72% viewport).
+    Add a new scroll effect there instead of adding another listener.
+- Pointer effects measure against the element box on `pointermove` and bail out for
+  `pointerType === "touch"`, so they cost nothing on mobile.
+- Every animation is disabled under `prefers-reduced-motion: reduce` — reveals snap
+  visible, the rAF loop returns early, and pointer effects are skipped in JS. Verify
+  with an `reducedMotion: "reduce"` Playwright context, not by eyeballing.
 - Client components are marked `"use client"` only when they hold state or touch the DOM.
   Everything else stays a server component.
 - Grid layouts always declare `grid-cols-1` before a `lg:grid-cols-[...]` override —
@@ -139,6 +155,25 @@ permission) instead of throwing.
   children (drifting glow divs, the marquee track) legitimately sit outside the viewport —
   verify with `document.documentElement.scrollWidth - clientWidth === 0`, not by scanning
   every element's bounding box.
+- **A `<Reveal>` wrapper never becomes visible.** Cause: `IntersectionObserver` never
+  fires for an element inside a `display: none` subtree, so `data-shown` stays `false`
+  and `.reveal` keeps `opacity: 0` forever. This bit the hero scroll cue, which is
+  `hidden sm:flex`. Fix: for anything the layout hides at some breakpoint, use a plain
+  `animate-rise` div instead of `Reveal`. If a section ever renders below the fold with
+  `content-visibility: auto`, the same trap applies.
+- **A pointer effect never shows up but the CSS looks right.** Check whether the custom
+  property is being set on the element or on its wrapper — `.glow-border::after` on an
+  `<a>` reads `--mx` from the `CursorGlow` div *around* that `<a>`, so `el.style` is empty
+  while `getComputedStyle(el).getPropertyValue("--mx")` resolves fine. Assert on the
+  pseudo-element's computed `opacity` and on the wrapper's inline `--mx`, not on the
+  element's own inline style.
+- **Testing effects with Playwright.** `page.locator(".sel").scrollIntoView()` animates
+  under `scroll-behavior: smooth`, so `getBoundingClientRect()` and hover coordinates are
+  stale — inject `html{scroll-behavior:auto !important}` or use `window.scrollTo`.
+  Playwright here lives in the Hermes install, not this project: import it with
+  `createRequire(import.meta.url)("/usr/local/lib/hermes-agent/node_modules/playwright")`
+  and launch with `executablePath: "/usr/bin/google-chrome"` (the bundled headless shell
+  is not downloaded). Keep those scripts in `/tmp`, never in this repo.
 - **Avatar looks blurry.** `next/image` only requests the widths configured via `sizes` /
   `width`. Raise the requested width rather than scaling the source. `images.unoptimized`
   is required for static export, so `sizes` is what controls the delivered file.
