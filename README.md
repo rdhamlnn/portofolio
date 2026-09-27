@@ -84,6 +84,8 @@ scripts/
   check-live.mjs      # runnable live check for a deployed URL
   make-brand-paths.py # regenerates src/components/brand-paths.ts
   make-favicon.py     # regenerates src/app/icon.svg
+  make-og.mjs         # regenerates public/og.png (1200x630 link preview card)
+  fetch-brand-icons.sh # refreshes scripts/brand-icons.json from simple-icons
   brand-icons.json    # vendored simple-icons SVG source (CC0)
 ```
 
@@ -127,6 +129,15 @@ scripts/
   `scripts/make-brand-paths.py`, then run `python3 scripts/make-brand-paths.py`.
   Never hand-edit a path or hand-pick a viewBox — every mark uses the canonical
   `0 0 24 24` grid, which is already optically consistent across brands.
+- `scripts/brand-icons.json` maps slug -> bare path `d` string, **not** full `<svg>`
+  markup. Read it as a path. Searching for `<path d="` inside it silently truncates the
+  moveto and produces an SVG that parses fine but draws nothing — that is exactly how the
+  favicon shipped blank once. Both `make-favicon.py` and `make-og.mjs` assert the value
+  starts with `M`/`m`; keep those guards.
+- Link previews need `public/og.png`. It is generated (`node scripts/make-og.mjs`) so the
+  card copy cannot drift from `src/data/site.ts`. The script self-checks that every brand
+  mark actually drew and that no text sits within 40px of the card edge; it throws instead
+  of writing a broken card. Re-run it after changing the headline or role.
 - All marks come from [simple-icons](https://simpleicons.org) (CC0-1.0), so they are
   free to use without attribution. Keep the credits line in this file if you swap sources.
 
@@ -209,6 +220,11 @@ permission) instead of throwing.
   and flags zero-size ones catches this in one pass — it found 67/67 good after the icon
   work. Note `getBBox()` returns all-zero when the parent has `display: none`, so scroll
   the element into view (or check the rendered rect instead) before trusting it.
+- **Favicon shows nothing / the preview card is blank.** `scripts/check-live.mjs` now
+  asserts both: it fetches `og:image`, confirms it is absolute, 200, and actually
+  1200x630, and injects the favicon into a hidden host to check `path.getBBox()` is
+  non-zero. Run it against the live URL after a deploy — both defects are invisible in the
+  page body and would otherwise ship silently.
 - **Avatar looks blurry.** `next/image` only requests the widths configured via `sizes` /
   `width`. Raise the requested width rather than scaling the source. `images.unoptimized`
   is required for static export, so `sizes` is what controls the delivered file.
