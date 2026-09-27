@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Reveal from "./Reveal";
 import { SectionHeading, SectionShell } from "./Section";
 import { CursorGlow } from "./fx";
+import { BrandIcon } from "./icons";
+import { ArrowRight, ArrowUpRight, Check, CopyIcon, Mail } from "./ui";
 import { profile } from "@/data/site";
 
 const channels = [
@@ -12,17 +14,16 @@ const channels = [
     value: "github.com/rdhamlnn",
     href: profile.github,
     hint: "Kode dan riwayat proyek",
+    brand: "github",
   },
   {
     label: "Email",
     value: profile.email,
     href: `mailto:${profile.email}`,
     hint: "Untuk kerja sama dan diskusi",
+    icon: "mail",
   },
 ];
-
-/** Three-letter monogram placeholder — swap for real brand marks later. */
-const ICONS: Record<string, string> = { GitHub: "GH", Email: "@" };
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
@@ -103,7 +104,7 @@ export default function Contact() {
                   >
                     Mulai Diskusi
                     <span className="transition-transform duration-300 group-hover:translate-x-1">
-                      →
+                      <ArrowRight className="h-4 w-4" />
                     </span>
                   </a>
                   <button
@@ -111,6 +112,7 @@ export default function Contact() {
                     onClick={copyEmail}
                     className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-3 text-sm transition-colors hover:bg-surface-strong"
                   >
+                    {copied ? <Check className="h-4 w-4 text-accent2" /> : <CopyIcon className="h-4 w-4" />}
                     {copied ? "Email tersalin" : "Salin email"}
                   </button>
                 </div>
@@ -132,7 +134,11 @@ export default function Contact() {
                   className="glass card-hover glow-border relative flex items-center gap-4 overflow-hidden rounded-2xl p-6"
                 >
                   <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-line bg-surface font-mono text-sm text-accent2">
-                    {ICONS[channel.label] ?? channel.label.slice(0, 2)}
+                    {channel.brand ? (
+                      <BrandIcon brand={channel.brand} className="h-5 w-5" />
+                    ) : (
+                      <Mail className="h-5 w-5" />
+                    )}
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm font-medium">{channel.label}</span>
@@ -141,9 +147,7 @@ export default function Contact() {
                     </span>
                     <span className="mt-1.5 block text-xs text-muted">{channel.hint}</span>
                   </span>
-                  <span className="text-muted transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                    ↗
-                  </span>
+                  <ArrowUpRight className="h-4 w-4 shrink-0 text-muted transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </a>
               </CursorGlow>
             </Reveal>

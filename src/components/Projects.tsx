@@ -4,6 +4,8 @@ import { useState } from "react";
 import Reveal from "./Reveal";
 import { Badge, SectionHeading, SectionShell } from "./Section";
 import { CursorGlow } from "./fx";
+import { TechMark } from "./icons";
+import { ArrowUpRight } from "./ui";
 import { projects } from "@/data/site";
 
 export default function Projects() {
@@ -80,7 +82,12 @@ export default function Projects() {
 
             <div className="relative mt-6 flex flex-wrap gap-2">
               {active.stack.map((tech) => (
-                <Badge key={`${active.slug}-${tech}`}>{tech}</Badge>
+                <Badge key={`${active.slug}-${tech}`}>
+                  <span className="inline-flex items-center gap-1.5">
+                    <TechMark name={tech} className="h-3.5 w-3.5 text-accent2" />
+                    {tech}
+                  </span>
+                </Badge>
               ))}
             </div>
 
@@ -117,7 +124,7 @@ export default function Projects() {
                     aria-hidden="true"
                     className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   >
-                    ↗
+                    <ArrowUpRight className="h-4 w-4" />
                   </span>
                 </a>
               )}

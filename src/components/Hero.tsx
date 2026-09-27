@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import AmbientCanvas from "./AmbientCanvas";
 import TypingWords from "./TypingWords";
+import { BrandIcon } from "./icons";
+import { ArrowRight } from "./ui";
 import { profile, stats } from "@/data/site";
 
 export default function Hero() {
@@ -116,7 +118,7 @@ export default function Hero() {
               className="shine group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-medium text-bg transition-transform duration-300 hover:-translate-y-0.5"
             >
               Lihat Proyek
-              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
             <a
               href={`mailto:${profile.email}`}
@@ -185,15 +187,17 @@ export default function Hero() {
           </div>
 
           <div
-            className="animate-drift absolute -top-4 -left-7 hidden rounded-xl border border-line bg-bg-soft/90 px-3 py-2 font-mono text-xs backdrop-blur lg:block"
+            className="animate-drift absolute -top-4 -left-7 hidden items-center gap-2 rounded-xl border border-line bg-bg-soft/90 px-3 py-2 font-mono text-xs backdrop-blur lg:flex"
             style={{ animationDuration: "11s" }}
           >
+            <BrandIcon brand="laravel" className="h-3.5 w-3.5 text-accent2" />
             Laravel
           </div>
           <div
-            className="animate-drift absolute -right-6 bottom-28 hidden rounded-xl border border-line bg-bg-soft/90 px-3 py-2 font-mono text-xs backdrop-blur lg:block"
+            className="animate-drift absolute -right-6 bottom-28 hidden items-center gap-2 rounded-xl border border-line bg-bg-soft/90 px-3 py-2 font-mono text-xs backdrop-blur lg:flex"
             style={{ animationDuration: "13s", animationDelay: "-4s" }}
           >
+            <BrandIcon brand="mysql" className="h-3.5 w-3.5 text-accent2" />
             MySQL
           </div>
         </div>

@@ -72,6 +72,9 @@ src/
     Reveal.tsx        # IntersectionObserver scroll reveal wrapper (5 axes)
     ScrollFX.tsx      # one rAF loop for parallax / rail-grow / dot-light
     fx.tsx            # TiltCard, CursorGlow, CountUp primitives
+    icons.tsx         # BrandIcon / TechMark — brand marks + concept glyphs
+    ui.tsx            # generic stroke glyphs (arrows, mail, copy, database...)
+    brand-paths.ts    # GENERATED brand SVG paths — see scripts/make-brand-paths.py
     Section.tsx       # SectionShell / SectionHeading / Badge primitives
   data/
     site.ts           # ALL site content and copy
@@ -79,6 +82,9 @@ public/
   avatar.jpg          # profile photo (fetched from the GitHub avatar)
 scripts/
   check-live.mjs      # runnable live check for a deployed URL
+  make-brand-paths.py # regenerates src/components/brand-paths.ts
+  make-favicon.py     # regenerates src/app/icon.svg
+  brand-icons.json    # vendored simple-icons SVG source (CC0)
 ```
 
 ## Conventions
@@ -108,6 +114,21 @@ scripts/
   Everything else stays a server component.
 - Grid layouts always declare `grid-cols-1` before a `lg:grid-cols-[...]` override —
   an implicit single-column grid sizes to max-content and overflows on narrow screens.
+- **Icons are inline SVG, never text glyphs and never an icon package.** `→`, `↗`, `↑`
+  render differently per platform (emoji fallback on some, missing glyph on others) and
+  `GH` / `@` as a "logo" is a placeholder, not a mark. Use `icons.tsx` for brand marks
+  (via `brandByName`) and `ui.tsx` for generic glyphs. Both inherit `currentColor`, so
+  color comes from the surrounding text class and size from `h-*` / `w-*`.
+- A name with no real brand mark gets a drawn concept glyph, not a fake logo — `REST API`
+  and `Database Design` map to `Braces` / `Database`. The mapping lives in `CONCEPT` in
+  `icons.tsx`; add an entry there rather than inventing a brand.
+- `src/components/brand-paths.ts` is **generated**. To add a mark: add the slug to
+  `scripts/brand-icons.json` (fetch it from simple-icons), add the name -> key pair in
+  `scripts/make-brand-paths.py`, then run `python3 scripts/make-brand-paths.py`.
+  Never hand-edit a path or hand-pick a viewBox — every mark uses the canonical
+  `0 0 24 24` grid, which is already optically consistent across brands.
+- All marks come from [simple-icons](https://simpleicons.org) (CC0-1.0), so they are
+  free to use without attribution. Keep the credits line in this file if you swap sources.
 
 ## Boundaries
 
@@ -182,6 +203,12 @@ permission) instead of throwing.
   `createRequire(import.meta.url)("/usr/local/lib/hermes-agent/node_modules/playwright")`
   and launch with `executablePath: "/usr/bin/google-chrome"` (the bundled headless shell
   is not downloaded). Keep those scripts in `/tmp`, never in this repo.
+- **A brand icon renders as an empty box or nothing at all.** Check the path is non-empty
+  and that the `<svg>` has a `viewBox`. `path.getBBox()` returning `0x0`, or the rendered
+  rect being `0x0`, means the mark did not draw. A quick sweep that walks every `<svg>`
+  and flags zero-size ones catches this in one pass — it found 67/67 good after the icon
+  work. Note `getBBox()` returns all-zero when the parent has `display: none`, so scroll
+  the element into view (or check the rendered rect instead) before trusting it.
 - **Avatar looks blurry.** `next/image` only requests the widths configured via `sizes` /
   `width`. Raise the requested width rather than scaling the source. `images.unoptimized`
   is required for static export, so `sizes` is what controls the delivered file.

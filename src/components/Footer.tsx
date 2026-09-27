@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ArrowUp } from "./ui";
 import { profile } from "@/data/site";
 
 export default function Footer() {
@@ -80,7 +81,10 @@ export default function Footer() {
               <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-accent2 transition-transform duration-300 group-hover:scale-x-100" />
             </a>
             <a href="#home" className="group relative hover:text-ink">
-              Kembali ke atas ↑
+              <span className="inline-flex items-center gap-1">
+                Kembali ke atas
+                <ArrowUp className="h-3.5 w-3.5" />
+              </span>
               <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-accent2 transition-transform duration-300 group-hover:scale-x-100" />
             </a>
           </div>
@@ -100,7 +104,7 @@ export default function Footer() {
           show ? "scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"
         }`}
       >
-        <span aria-hidden="true">↑</span>
+        <ArrowUp className="h-4 w-4" />
       </button>
     </>
   );

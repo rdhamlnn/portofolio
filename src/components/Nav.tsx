@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Mail } from "./ui";
 import { navItems, profile } from "@/data/site";
 
 const SECTION_IDS = ["home", "tentang", "keahlian", "proyek", "perjalanan", "kontak"];
@@ -137,8 +138,9 @@ export default function Nav() {
           <div className="flex items-center gap-2">
             <a
               href={`mailto:${profile.email}`}
-              className="shine hidden rounded-full bg-ink px-4 py-2 text-sm font-medium text-bg transition-transform duration-300 hover:-translate-y-0.5 sm:block"
+              className="shine hidden items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-medium text-bg transition-transform duration-300 hover:-translate-y-0.5 sm:inline-flex"
             >
+              <Mail className="h-3.5 w-3.5" />
               Hire me
             </a>
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Reveal from "./Reveal";
 import { SectionHeading, SectionShell } from "./Section";
 import { CountUp } from "./fx";
+import { brandOf, BrandIcon } from "./icons";
 import { skillGroups } from "@/data/site";
 
 export default function SkillsExplorer() {
@@ -54,7 +55,12 @@ export default function SkillsExplorer() {
             {group.items.map((skill) => (
               <li key={`${group.id}-${skill.name}`}>
                 <div className="flex items-baseline justify-between gap-3">
-                  <span className="text-sm font-medium">{skill.name}</span>
+                  <span className="inline-flex items-center gap-2 text-sm font-medium">
+                    {brandOf(skill.name) && (
+                      <BrandIcon brand={brandOf(skill.name)!} className="h-4 w-4 text-accent2" />
+                    )}
+                    {skill.name}
+                  </span>
                   <span className="font-mono text-xs text-muted">
                     <CountUp to={skill.level} />%
                   </span>
