@@ -25,6 +25,9 @@ export default function Footer() {
           </div>
 
           <div className="flex items-center gap-5 font-mono text-xs text-muted">
+            <a href="https://github.com/rdhamlnn/portofolio" target="_blank" rel="noreferrer noopener" className="hover:text-ink">
+              Sumber
+            </a>
             <a href={profile.github} target="_blank" rel="noreferrer noopener" className="hover:text-ink">
               GitHub
             </a>
