@@ -1,4 +1,4 @@
-# Portfolio — Muhammad Ridha Maulana
+# Portfolio: Muhammad Ridha Maulana
 
 Personal portfolio site. Single-page, dark theme, built with Next.js App Router and
 deployed on Vercel.
@@ -8,12 +8,12 @@ deployed on Vercel.
 - **Stack:** Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS v4
 - **Runtime:** Node.js 24
 - **Package manager:** npm
-- **Deploy target:** Vercel — https://rdhamlnn.vercel.app (static export from `out/`)
+- **Deploy target:** Vercel, https://rdhamlnn.vercel.app (static export from `out/`)
 - **Repository:** https://github.com/rdhamlnn/portofolio (branch `main`)
-- **Auto-deploy:** yes — `.github/workflows/deploy.yml` runs on every push to `main`. It
+- **Auto-deploy:** yes: `.github/workflows/deploy.yml` runs on every push to `main`. It
   needs the `VERCEL_TOKEN` repo secret (GitHub → Settings → Secrets → Actions). Vercel's own
   git integration is unavailable for this account (see Troubleshooting), so this replaces it.
-- **Data:** all content lives in `src/data/site.ts` — edit that file, not the components
+- **Data:** all content lives in `src/data/site.ts`. Edit that file, not the components
 
 ## Commands
 
@@ -33,7 +33,7 @@ npm run build                    # static export -> out/
 npx vercel deploy --prod --yes   # https://rdhamlnn.vercel.app
 ```
 
-Or just `git push` — GitHub Actions deploys automatically (see `.github/workflows/deploy.yml`).
+Or just `git push`; GitHub Actions deploys automatically (see `.github/workflows/deploy.yml`).
 
 Anonymous throwaway preview, if you ever need one:
 
@@ -72,9 +72,9 @@ src/
     Reveal.tsx        # IntersectionObserver scroll reveal wrapper (5 axes)
     ScrollFX.tsx      # one rAF loop for parallax / rail-grow / dot-light
     fx.tsx            # TiltCard, CursorGlow, CountUp primitives
-    icons.tsx         # BrandIcon / TechMark — brand marks + concept glyphs
+    icons.tsx         # BrandIcon / TechMark: brand marks + concept glyphs
     ui.tsx            # generic stroke glyphs (arrows, mail, copy, database...)
-    brand-paths.ts    # GENERATED brand SVG paths — see scripts/make-brand-paths.py
+    brand-paths.ts    # GENERATED brand SVG paths. See scripts/make-brand-paths.py
     Section.tsx       # SectionShell / SectionHeading / Badge primitives
   data/
     site.ts           # ALL site content and copy
@@ -93,6 +93,18 @@ scripts/
 
 - Content, copy, and project metadata live in `src/data/site.ts`. Components render, they
   don't hardcode strings.
+- **No em dashes (U+2014) anywhere.** They read as machine-written and are the single most
+  recognisable tell. Write the punctuation the sentence actually needs: a comma for a
+  clause, a colon before a list, a semicolon between independent clauses, or a full stop.
+  Section eyebrows use a middle dot (`01 · Tentang`), metadata titles use a pipe
+  (`Name | Role`), and date ranges use a slash (`2025/2026`) or a word (`Sejak 2024`).
+  Audit with `grep -rn $'\u2014' src/ README.md` plus a scan of the built output.
+- Copy is written the way a person would say it. Avoid the usual filler constructions
+  ("tidak hanya ... tetapi juga", "di era digital", "perlu dicatat bahwa") and stacked
+  triples. Short sentences beat balanced clauses; do not pad a paragraph to look complete.
+- Do not hard-wrap prose inside a JSX text node to match an editor width. Indentation in a
+  multi-line text node collapses to a single space and can land mid-phrase. Let the browser
+  wrap: keep the source line long. Use `<br />` only for a deliberate break.
 - Colors come from CSS custom properties in `globals.css` (`--accent`, `--accent-2`,
   `--line`, ...) exposed to Tailwind via `@theme inline`. Use the token names
   (`bg-accent`, `text-muted`, `border-line`) instead of raw hex.
@@ -109,29 +121,29 @@ scripts/
     Add a new scroll effect there instead of adding another listener.
 - Pointer effects measure against the element box on `pointermove` and bail out for
   `pointerType === "touch"`, so they cost nothing on mobile.
-- Every animation is disabled under `prefers-reduced-motion: reduce` — reveals snap
+- Every animation is disabled under `prefers-reduced-motion: reduce`: reveals snap
   visible, the rAF loop returns early, and pointer effects are skipped in JS. Verify
   with an `reducedMotion: "reduce"` Playwright context, not by eyeballing.
 - Client components are marked `"use client"` only when they hold state or touch the DOM.
   Everything else stays a server component.
-- Grid layouts always declare `grid-cols-1` before a `lg:grid-cols-[...]` override —
+- Grid layouts always declare `grid-cols-1` before a `lg:grid-cols-[...]` override, because
   an implicit single-column grid sizes to max-content and overflows on narrow screens.
 - **Icons are inline SVG, never text glyphs and never an icon package.** `→`, `↗`, `↑`
   render differently per platform (emoji fallback on some, missing glyph on others) and
   `GH` / `@` as a "logo" is a placeholder, not a mark. Use `icons.tsx` for brand marks
   (via `brandByName`) and `ui.tsx` for generic glyphs. Both inherit `currentColor`, so
   color comes from the surrounding text class and size from `h-*` / `w-*`.
-- A name with no real brand mark gets a drawn concept glyph, not a fake logo — `REST API`
+- A name with no real brand mark gets a drawn concept glyph, not a fake logo: `REST API`
   and `Database Design` map to `Braces` / `Database`. The mapping lives in `CONCEPT` in
   `icons.tsx`; add an entry there rather than inventing a brand.
 - `src/components/brand-paths.ts` is **generated**. To add a mark: add the slug to
   `scripts/brand-icons.json` (fetch it from simple-icons), add the name -> key pair in
   `scripts/make-brand-paths.py`, then run `python3 scripts/make-brand-paths.py`.
-  Never hand-edit a path or hand-pick a viewBox — every mark uses the canonical
+  Never hand-edit a path or hand-pick a viewBox. Every mark uses the canonical
   `0 0 24 24` grid, which is already optically consistent across brands.
 - `scripts/brand-icons.json` maps slug -> bare path `d` string, **not** full `<svg>`
   markup. Read it as a path. Searching for `<path d="` inside it silently truncates the
-  moveto and produces an SVG that parses fine but draws nothing — that is exactly how the
+  moveto and produces an SVG that parses fine but draws nothing. That is exactly how the
   favicon shipped blank once. Both `make-favicon.py` and `make-og.mjs` assert the value
   starts with `M`/`m`; keep those guards.
 - Link previews need `public/og.png`. It is generated (`node scripts/make-og.mjs`) so the
@@ -149,7 +161,7 @@ scripts/
 - `.vercel/` and `.next/` build output
 - `node_modules/`
 
-Do not add a new runtime dependency for animation, icons, or UI primitives — the site is
+Do not add a new runtime dependency for animation, icons, or UI primitives. The site is
 dependency-free beyond Next.js, React, and Tailwind on purpose.
 
 ## Dependencies
@@ -160,9 +172,9 @@ Dev: `typescript`, `tailwindcss` (+ `@tailwindcss/postcss`), `eslint` + `eslint-
 
 ## Configuration
 
-- `next.config.ts` — `output: "export"` + `images.unoptimized` (required by static export)
-  and `reactStrictMode`. `vercel.json` — `framework: null`, `outputDirectory: "out"`.
-- Tailwind v4 is configured entirely in `globals.css` via `@import "tailwindcss"` —
+- `next.config.ts`: `output: "export"` + `images.unoptimized` (required by static export)
+  and `reactStrictMode`. `vercel.json`: `framework: null`, `outputDirectory: "out"`.
+- Tailwind v4 is configured entirely in `globals.css` via `@import "tailwindcss"`;
   there is no `tailwind.config.js`.
 - Fonts: `Geist` and `Geist_Mono` through `next/font/google`, exposed as
   `--font-geist-sans` / `--font-geist-mono`.
@@ -179,19 +191,18 @@ permission) instead of throwing.
 - **Root route returns 404 on Vercel while `/_next/*` assets and `index.html` return 200.**
   Cause: deploying the *source directory* lets `@vercel/next` build and own the routing, and
   the generated route table does not serve `/`. Fix: build with `output: "export"` and deploy
-  the `out/` directory instead — static hosting serves `/` from `out/index.html` directly.
+  the `out/` directory instead: static hosting serves `/` from `out/index.html` directly.
   Symptom to look for: `GET /` returns 404 with `content-disposition: inline; filename="404"`
   while `GET /index.html` returns 200 with the right `<title>`.
 - **Horizontal scroll appears below ~414px.** Cause: a grid without an explicit
   `grid-cols-1` sizes to max-content. Check the layout wrappers first. Decorative layer
-  children (drifting glow divs, the marquee track) legitimately sit outside the viewport —
-  verify with `document.documentElement.scrollWidth - clientWidth === 0`, not by scanning
+  children (drifting glow divs, the marquee track) legitimately sit outside the viewport. Verify with `document.documentElement.scrollWidth - clientWidth === 0`, not by scanning
   every element's bounding box.
 - **`scrollWidth` is a few px wider than `clientWidth` on mobile, but nothing looks
   broken.** Cause: `.reveal[data-axis="left"|"right"]` offsets by `translateX`, and an
   element that has not been revealed yet sits at that offset. If the offset exceeds the
   section padding (`px-5` = 20px), it widens the document. `body { overflow-x: hidden }`
-  hides it visually, so the page does not actually scroll sideways — which is why the
+  hides it visually, so the page does not actually scroll sideways, which is why the
   measurement and the screenshot disagree. Fix: keep the horizontal reveal offset under
   20px (currently 18px). Note an element starts at `opacity: 0` but **still contributes
   to scrollWidth**, so measure right after load, before any scrolling.
@@ -202,14 +213,14 @@ permission) instead of throwing.
   `animate-rise` div instead of `Reveal`. If a section ever renders below the fold with
   `content-visibility: auto`, the same trap applies.
 - **A pointer effect never shows up but the CSS looks right.** Check whether the custom
-  property is being set on the element or on its wrapper — `.glow-border::after` on an
+  property is being set on the element or on its wrapper. `.glow-border::after` on an
   `<a>` reads `--mx` from the `CursorGlow` div *around* that `<a>`, so `el.style` is empty
   while `getComputedStyle(el).getPropertyValue("--mx")` resolves fine. Assert on the
   pseudo-element's computed `opacity` and on the wrapper's inline `--mx`, not on the
   element's own inline style.
 - **Testing effects with Playwright.** `page.locator(".sel").scrollIntoView()` animates
   under `scroll-behavior: smooth`, so `getBoundingClientRect()` and hover coordinates are
-  stale — inject `html{scroll-behavior:auto !important}` or use `window.scrollTo`.
+  stale: inject `html{scroll-behavior:auto !important}` or use `window.scrollTo`.
   Playwright here lives in the Hermes install, not this project: import it with
   `createRequire(import.meta.url)("/usr/local/lib/hermes-agent/node_modules/playwright")`
   and launch with `executablePath: "/usr/bin/google-chrome"` (the bundled headless shell
@@ -217,35 +228,40 @@ permission) instead of throwing.
 - **A brand icon renders as an empty box or nothing at all.** Check the path is non-empty
   and that the `<svg>` has a `viewBox`. `path.getBBox()` returning `0x0`, or the rendered
   rect being `0x0`, means the mark did not draw. A quick sweep that walks every `<svg>`
-  and flags zero-size ones catches this in one pass — it found 67/67 good after the icon
+  and flags zero-size ones catches this in one pass. It found 67/67 good after the icon
   work. Note `getBBox()` returns all-zero when the parent has `display: none`, so scroll
   the element into view (or check the rendered rect instead) before trusting it.
 - **Favicon shows nothing / the preview card is blank.** `scripts/check-live.mjs` now
   asserts both: it fetches `og:image`, confirms it is absolute, 200, and actually
   1200x630, and injects the favicon into a hidden host to check `path.getBBox()` is
-  non-zero. Run it against the live URL after a deploy — both defects are invisible in the
+  non-zero. Run it against the live URL after a deploy: both defects are invisible in the
   page body and would otherwise ship silently.
+- **The name wraps onto two lines in the header around 768-900px.** Cause: it sits in a
+  flex row, so the span shrinks to *min-content* and breaks mid-name while there is still
+  free space. Fix: `min-w-0` + `whitespace-nowrap` on the text span and `shrink-0` on the
+  avatar tile. This only shows in a narrow band, so probe a list of widths (320 through
+  1440) and assert the name renders as exactly one line rather than checking one viewport.
 - **Avatar looks blurry.** `next/image` only requests the widths configured via `sizes` /
   `width`. Raise the requested width rather than scaling the source. `images.unoptimized`
   is required for static export, so `sizes` is what controls the delivered file.
 - **`git push` fails with `403 ... denied to <user>` on a repo the token can read.**
   Cause: a fine-grained PAT (prefix `github_pat_`) only reaches repositories explicitly
-  selected when the token was created, so anything created afterwards — including your own
-  new repo — stays out of scope. Fix: `gh auth login --web --scopes repo,workflow,read:org`
+  selected when the token was created, so anything created afterwards, including your own
+  new repo, stays out of scope. Fix: `gh auth login --web --scopes repo,workflow,read:org`
   and complete the device flow; that issues a `gho_` token with full scope.
 - **`git push` fails with `could not read Username for 'https://github.com'`.** Cause: the
   credential helper was neutralised, or a stale separate helper is configured. `gh auth
-  setup-git` installs `!gh auth git-credential`, which is the helper that actually works —
-  leave it enabled and do not override it per-command.
+  setup-git` installs `!gh auth git-credential`, which is the helper that actually works.
+  Leave it enabled and do not override it per-command.
 - **`vercel git connect` fails with `You need to add a Login Connection to your GitHub
   account first. (400)`.** The Vercel account was created with an email/SMS login, not via
   GitHub, so it has no Git integration. Deploy hooks fail the same way (`The project is not
   connected to any repository so it cannot have deploy hooks`). Fix: deploy from GitHub
-  Actions with an account token instead — see `.github/workflows/deploy.yml`. Adding the
+  Actions with an account token instead; see `.github/workflows/deploy.yml`. Adding the
   login connection in the Vercel dashboard is the alternative.
 - **Vercel API returns `User not found.` for `GET /v2/user` on a valid token.** Expected for
   an account-level access token: it can drive deploys, but the user endpoint is not readable.
-  Verify a token with `vercel project ls --token <t>` instead — a good token lists projects.
+  Verify a token with `vercel project ls --token <t>` instead: a good token lists projects.
 
 ## Review Triggers
 

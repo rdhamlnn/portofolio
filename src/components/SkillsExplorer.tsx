@@ -14,7 +14,7 @@ export default function SkillsExplorer() {
   return (
     <SectionShell id="keahlian">
       <SectionHeading
-        index="02 — Keahlian"
+        index="02 · Keahlian"
         title="Perangkat yang aku pakai sehari-hari."
         lead="Pilih kategori untuk melihat detailnya. Angka menunjukkan seberapa sering aku memakainya dalam pekerjaan nyata, bukan sekadar pernah mencoba."
       />

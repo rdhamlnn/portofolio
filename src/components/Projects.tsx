@@ -15,7 +15,7 @@ export default function Projects() {
   return (
     <SectionShell id="proyek">
       <SectionHeading
-        index="03 — Proyek"
+        index="03 · Proyek"
         title="Yang pernah aku bangun."
         lead="Klik salah satu proyek untuk melihat peran, teknologi, dan bagian yang aku kerjakan."
       />

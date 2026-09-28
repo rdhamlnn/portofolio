@@ -50,7 +50,7 @@ export default function Nav() {
     };
   }, []);
 
-  // Measure the active nav link → pill position. Re-measured on resize.
+  // Measure the active nav link, then the pill position. Re-measured on resize.
   useEffect(() => {
     const measure = () => {
       const list = listRef.current;
@@ -96,10 +96,12 @@ export default function Nav() {
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 sm:px-8">
           <a href="#home" className="group flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center rounded-xl border border-line-strong bg-surface font-mono text-sm font-semibold text-accent2 transition-colors duration-300 group-hover:border-accent2/60">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-line-strong bg-surface font-mono text-sm font-semibold text-accent2 transition-colors duration-300 group-hover:border-accent2/60">
               MR
             </span>
-            <span className="hidden text-sm font-medium tracking-tight sm:block">
+            {/* min-w-0 + nowrap: without them the flex item shrinks to min-content
+                and the name breaks across two lines around 768-900px. */}
+            <span className="hidden min-w-0 whitespace-nowrap text-sm font-medium tracking-tight sm:block">
               {profile.name}
               <span className="ml-2 font-mono text-xs text-muted">@{profile.handle}</span>
             </span>

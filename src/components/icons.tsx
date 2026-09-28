@@ -15,7 +15,7 @@ const CONCEPT: Record<string, (p: { className?: string }) => ReactNode> = {
 
 /**
  * Brand mark on the canonical 24-unit simple-icons grid, so every mark carries
- * its own optical weight. Inherits `currentColor` — set color with a text class
+ * its own optical weight. Inherits `currentColor`; set color with a text class
  * and size with h-/w- utilities.
  */
 export function BrandIcon({

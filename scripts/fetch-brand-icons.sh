@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Refresh scripts/brand-icons.json with brand paths from simple-icons (CC0-1.0).
 #
-# Stores bare `d` attribute strings keyed by simple-icons slug — NOT full <svg>
+# Stores bare `d` attribute strings keyed by simple-icons slug, NOT full <svg>
 # markup. scripts/make-brand-paths.py and make-og.mjs both read it that way.
 # To add a mark: append the slug to SLUGS, run this, then wire the name up in
 # scripts/make-brand-paths.py.

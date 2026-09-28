@@ -59,7 +59,7 @@ export default function Contact() {
   return (
     <SectionShell id="kontak">
       <SectionHeading
-        index="05 — Kontak"
+        index="05 · Kontak"
         title="Punya proyek atau butuh bantuan teknis?"
         lead="Aku terbuka untuk pekerjaan freelance, kolaborasi proyek, maupun diskusi seputar database dan pengembangan web."
       />
@@ -92,7 +92,7 @@ export default function Contact() {
                 </p>
 
                 <p className="mt-5 max-w-md text-sm leading-relaxed text-muted">
-                  Kirim pesan berisi gambaran singkat kebutuhanmu — lingkup kerja, tenggat, dan
+                  Kirim pesan berisi gambaran singkat kebutuhanmu: lingkup kerja, tenggat, dan
                   hasil yang diharapkan. Aku balas dengan estimasi dan pendekatan teknis yang aku
                   sarankan.
                 </p>

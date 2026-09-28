@@ -116,7 +116,7 @@ const drawn = await page.evaluate(() =>
     }
   }).length,
 );
-// Measure real content, not the decorative blur — the glow divs intentionally
+// Measure real content, not the decorative blur: the glow divs intentionally
 // bleed past the card and are clipped by overflow:hidden.
 const bad = await page.evaluate(() => {
   const card = document.querySelector(".card").getBoundingClientRect();

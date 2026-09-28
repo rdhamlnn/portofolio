@@ -1,4 +1,4 @@
-// Brand marks from simple-icons (CC0-1.0) — https://simpleicons.org
+// Brand marks from simple-icons (CC0-1.0). https://simpleicons.org
 // Generated file. Do not edit a path by hand; re-run scripts/make-brand-paths.py.
 // All marks are filled paths on the canonical 0 0 24 24 grid.
 

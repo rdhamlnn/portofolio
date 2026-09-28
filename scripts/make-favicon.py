@@ -2,7 +2,7 @@
 """Regenerate src/app/icon.svg with a real drawn glyph.
 
 The previous icon used <text>MR</text>, which depends on the platform having a
-matching monospace font — it renders differently (or blank) across browsers and
+matching monospace font, because it renders differently (or blank) across browsers and
 OSes. This draws the mark instead.
 
 scripts/brand-icons.json stores bare path `d` strings (not full <svg> markup), so
@@ -13,7 +13,7 @@ import pathlib
 
 d = json.load(open("scripts/brand-icons.json"))["laravel"]
 if not d.lstrip().startswith(("M", "m")):
-    raise SystemExit("laravel path does not start with a moveto — data is malformed")
+    raise SystemExit("laravel path does not start with a moveto. Data is malformed")
 
 ICON = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>

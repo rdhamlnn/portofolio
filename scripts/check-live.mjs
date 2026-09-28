@@ -1,4 +1,4 @@
-// Temporary live QA — deleted after run.
+// Temporary live QA. Deleted after run.
 import { chromium } from "playwright-core";
 
 const URL = process.argv[2];

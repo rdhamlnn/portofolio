@@ -6,7 +6,7 @@ export default function Timeline() {
   return (
     <SectionShell id="perjalanan">
       <SectionHeading
-        index="04 — Perjalanan"
+        index="04 · Perjalanan"
         title="Jejak yang membentuk cara kerjaku."
         lead="Urutan pengalaman dari riset, proyek nyata, program studi, sampai latar pendidikan."
       />

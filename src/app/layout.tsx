@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.url),
-  title: `${profile.name} — ${profile.role}`,
+  title: `${profile.name} | ${profile.role}`,
   description: profile.intro,
   keywords: [
     "Muhammad Ridha Maulana",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "/",
-    title: `${profile.name} — ${profile.role}`,
+    title: `${profile.name} | ${profile.role}`,
     description: profile.headline,
     locale: "id_ID",
     siteName: profile.name,
@@ -40,13 +40,13 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: `${profile.name} — ${profile.headline}`,
+        alt: `${profile.name} | ${profile.headline}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${profile.name} — ${profile.role}`,
+    title: `${profile.name} | ${profile.role}`,
     description: profile.headline,
     images: ["/og.png"],
   },

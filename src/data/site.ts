@@ -26,7 +26,7 @@ export const profile = {
   role: "Web Developer & Database Engineer",
   headline: "Bangun sistem web yang rapi, cepat, dan bisa diandalkan.",
   intro:
-    "Aku mengembangkan aplikasi web end-to-end — dari perancangan skema database, API, sampai antarmuka yang enak dipakai. Fokus di ekosistem Laravel dan Next.js.",
+    "Aku mengembangkan aplikasi web end-to-end, mulai dari perancangan skema database, API, sampai antarmuka yang enak dipakai. Fokus di ekosistem Laravel dan Next.js.",
   status: "Terbuka untuk proyek freelance & kolaborasi",
   email: "fzridhaa@gmail.com",
   github: "https://github.com/rdhamlnn",
@@ -133,7 +133,7 @@ export const projects: Project[] = [
     description:
       "Riset penerapan NLP untuk mengenali emosi pada teks berbahasa Indonesia. Membandingkan pendekatan klasik TF-IDF + Naive Bayes dengan model transformer IndoBERT, lengkap dengan pipeline preprocessing dan evaluasi.",
     role: "Peneliti & Developer",
-    year: "2025 — 2026",
+    year: "2025/2026",
     stack: ["Python", "Jupyter", "Next.js", "TypeScript", "IndoBERT"],
     highlights: [
       "Dataset percakapan Indonesia, 4 kelas emosi",
@@ -180,7 +180,7 @@ export const projects: Project[] = [
     name: "Metode Numerik",
     tagline: "Implementasi algoritma numerik",
     description:
-      "Kumpulan implementasi metode numerik untuk menyelesaikan persamaan non-linear dan sistem persamaan: metode biseksi, Newton-Raphson, iterasi, hingga interpolasi — dibangun sebagai alat bantu belajar sekaligus validasi hasil hitung manual.",
+      "Kumpulan implementasi metode numerik untuk menyelesaikan persamaan non-linear dan sistem persamaan: metode biseksi, Newton-Raphson, iterasi, hingga interpolasi. Dibangun sebagai alat bantu belajar sekaligus validasi hasil hitung manual.",
     role: "Developer",
     year: "2025",
     stack: ["Python", "Jupyter"],
@@ -221,7 +221,7 @@ export const timeline = [
     period: "2025",
     title: "Pengembangan Sistem Bengkel",
     detail:
-      "Membangun WorkEase KCE dan KCE Mechanic — sistem operasional bengkel dari perancangan database sampai antarmuka.",
+      "Membangun WorkEase KCE dan KCE Mechanic, sistem operasional bengkel dari perancangan database sampai antarmuka.",
     tag: "Proyek",
   },
   {
@@ -232,7 +232,7 @@ export const timeline = [
     tag: "Program",
   },
   {
-    period: "2024 — Sekarang",
+    period: "Sejak 2024",
     title: "Politeknik Negeri Banjarmasin",
     detail:
       "Menempuh D3 Teknik Informatika dengan fokus Database Engineering dan pengembangan web.",

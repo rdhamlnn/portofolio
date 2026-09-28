@@ -26,7 +26,7 @@ export default function About() {
   return (
     <SectionShell id="tentang">
       <SectionHeading
-        index="01 — Tentang"
+        index="01 · Tentang"
         title="Merancang sistem dari datanya dulu, lalu tampilannya."
         lead="Aku lebih suka memahami alur data sebelum menulis antarmuka, karena keputusan struktur di awal menentukan seberapa mudah sistem itu dirawat setahun kemudian."
       />
@@ -42,7 +42,7 @@ export default function About() {
                 antarmukanya supaya nyaman dipakai orang non-teknis.
               </p>
               <p className="mt-5 leading-relaxed text-muted">
-                Selain pekerjaan web, aku juga menekuni sisi data dan kecerdasan buatan — terakhir
+                Selain pekerjaan web, aku juga menekuni sisi data dan kecerdasan buatan, terakhir
                 lewat riset klasifikasi emosi teks bahasa Indonesia. Kombinasi dua bidang inilah
                 yang membentuk caraku bekerja: berpikir soal struktur, sekaligus peduli pada
                 pengalaman pemakainya.
