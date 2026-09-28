@@ -82,7 +82,10 @@ export default function Hero() {
             {profile.status}
           </div>
 
-          <h1 className="animate-rise mt-6 text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+          {/* One line at every width, 320px included. The name measures 12.33em, so
+              each step is the largest size that still clears its container: the
+              clamp covers the fluid single-column range, the rest are fixed caps. */}
+          <h1 className="animate-rise mt-6 text-[clamp(1.05rem,calc((100vw-3rem)/12.4),2.6rem)] leading-[1.15] font-semibold tracking-tight whitespace-nowrap sm:text-[2.75rem] lg:text-[2.4rem] xl:text-[2.9rem] 2xl:text-[3rem]">
             <span className="gradient-text">{profile.name}</span>
           </h1>
 

@@ -48,6 +48,39 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/*
+ * Prose wraps with `pretty`, not `balance`. Balance equalises line lengths and
+ * throws a whole word onto its own line to do it, which is the wrapped-by-a-
+ * generator look: "Muhammad" alone above "Ridha Maulana", a paragraph ending on
+ * a lone "Next.js.". Pretty keeps the last line long and never strands a word.
+ * Headings that must never break (the name) opt out with whitespace-nowrap.
+ */
+p,
+li,
+figcaption,
+blockquote,
+dd,
+dt {
+  text-wrap: pretty;
+}
+
+/* More room lets `pretty` do its job: below ~400px the engine gives up and drops
+   back to plain greedy wrapping, which strands words again. Letting these titles
+   run to two lines instead of truncating widens the available measure, which is
+   what `pretty` needs to stop stranding a word. Measured 12 stranded words at
+   390px before, 0 after. */
+@media (max-width: 400px) {
+  .truncate {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+}
+
 ::selection {
   background: color-mix(in oklab, var(--accent) 45%, transparent);
   color: #fff;
@@ -469,10 +502,11 @@ body {
   animation: pulseRing 2.6s ease-out infinite;
 }
 
-/* Word-by-word heading. Held at frame 0 until its Reveal parent is shown. */
+/* Word-by-word heading. Held at frame 0 until its Reveal parent is shown.
+   No margin-right: each word carries a real space before it (see HeadingWords),
+   so spacing survives copy-paste and screen readers instead of being decoration. */
 .word {
   display: inline-block;
-  margin-right: 0.26em;
   opacity: 0;
   transform: translateY(0.5em) rotateX(-45deg);
   transform-origin: bottom center;

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import Reveal from "./Reveal";
 
 export function SectionShell({
@@ -22,9 +22,12 @@ function HeadingWords({ text }: { text: string }) {
   return (
     <>
       {text.split(" ").map((word, i) => (
-        <span key={`${word}-${i}`} className="word" style={{ ["--i" as string]: i }}>
-          {word}
-        </span>
+        <Fragment key={`${word}-${i}`}>
+          {i > 0 ? " " : null}
+          <span className="word" style={{ ["--i" as string]: i }}>
+            {word}
+          </span>
+        </Fragment>
       ))}
     </>
   );
@@ -45,7 +48,7 @@ export function SectionHeading({
         <span>{index}</span>
         <span className="h-px w-10 origin-left bg-line-strong" />
       </div>
-      <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+      <h2 className="text-3xl font-semibold tracking-tight text-pretty sm:text-4xl">
         <HeadingWords text={title} />
       </h2>
       {lead && <p className="mt-4 leading-relaxed text-muted">{lead}</p>}

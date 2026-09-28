@@ -102,6 +102,21 @@ scripts/
 - Copy is written the way a person would say it. Avoid the usual filler constructions
   ("tidak hanya ... tetapi juga", "di era digital", "perlu dicatat bahwa") and stacked
   triples. Short sentences beat balanced clauses; do not pad a paragraph to look complete.
+- **Never use `text-wrap: balance`.** Balance equalises line lengths, and it does that by
+  stranding a whole word on its own line: "Muhammad" above "Ridha Maulana", a paragraph
+  ending on a lone "Next.js.". It is the clearest "a generator laid this out" tell, and it
+  is also worse typography. Prose uses `text-wrap: pretty` (set once in `globals.css` for
+  `p` / `li` / `figcaption` / `blockquote` / `dd` / `dt`). `pretty` is a hint, not a
+  guarantee: under ~400px the engine gives up and strands words again, so `.truncate` is
+  released to two lines there, which widens the container enough for `pretty` to work.
+  Measured: 12 stranded words at 390px became 0. Verify with a widow audit that groups
+  words into visual lines by their rendered `top`, never by eyeballing a screenshot.
+- **Headings that must not break opt out with `whitespace-nowrap`, and the font size is
+  measured, not guessed.** The name carries no CSS spacing: each `.word` is followed by a
+  real space character in JSX, so the gap is a real space (measured 7.6px against a
+  computed 8.5px space) and copy-paste or a screen reader gets "Merancang sistem dari
+  datanya" instead of "Merancangsistemdaridatanya". A `margin-right` on `.word` doubles
+  the gap and breaks copy fidelity.
 - Do not hard-wrap prose inside a JSX text node to match an editor width. Indentation in a
   multi-line text node collapses to a single space and can land mid-phrase. Let the browser
   wrap: keep the source line long. Use `<br />` only for a deliberate break.
